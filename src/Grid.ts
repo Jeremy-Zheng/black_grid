@@ -11,16 +11,14 @@ class Grid extends egret.Sprite{
     private createView(x,y):void {
         this.grid= new egret.Sprite();
         this.grid.graphics.beginFill(0x0F0F0F, 1);
-        this.grid.graphics.drawRect(0, 0, 120, 160);
+        this.grid.graphics.drawRect(0, 0, 120, 120);
         this.grid.graphics.endFill();
         this.grid.width = 120;
-        this.grid.height = 160;
+        this.grid.height = 120;
         this.addChild(this.grid);
         this.grid.x=x;
         this.grid.y=y;
         this.grid.touchEnabled = true;
-
-
     }
 
 }

@@ -56,6 +56,8 @@ var black_grid = (function (_super) {
     //游戏开始
     black_grid.prototype.start_game = function () {
         this.y = this.stage.stageHeight - 800;
+        if (this.y == 0)
+            this.y = -40;
 
         this.grid_array = [];
 
@@ -100,11 +102,11 @@ var black_grid = (function (_super) {
 
     //绘制网格
     black_grid.prototype.my_drawRect = function () {
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 9; i++) {
             var shp = new egret.Shape();
             shp.graphics.lineStyle(1, 0xcccccc);
-            shp.graphics.moveTo(0, 160 * i);
-            shp.graphics.lineTo(480, 160 * i);
+            shp.graphics.moveTo(0, 120 * i);
+            shp.graphics.lineTo(480, 120 * i);
             shp.graphics.endFill();
             this.addChild(shp);
         }
@@ -123,8 +125,8 @@ var black_grid = (function (_super) {
     black_grid.prototype.init_grid_array = function () {
         this.grid_array = [];
 
-        for (var i = 0; i < 4; i++) {
-            var grid = new Grid(this.random_position().x, (3 - i) * 160);
+        for (var i = 0; i < 6; i++) {
+            var grid = new Grid(this.random_position().x, (5 - i) * 120);
 
             this.addChild(grid);
 
@@ -149,7 +151,7 @@ var black_grid = (function (_super) {
     //初始化soap_account_text 文本
     black_grid.prototype.init_time_text = function () {
         this.time_text = new egret.TextField();
-        this.time_text.y = 80;
+        this.time_text.y = 120;
         this.time_text.width = 475;
         this.time_text.textAlign = "center";
         this.time_text.textColor = 0x0099FF;
@@ -172,7 +174,7 @@ var black_grid = (function (_super) {
             egret.Tween.get(grid_temp).to({ alpha: 0 }, 100).call(instance.grid_disappear_call, grid_temp);
 
             //新增一个
-            var grid_mew = new Grid(instance.random_position().x, -160);
+            var grid_mew = new Grid(instance.random_position().x, -120);
             instance.addChildAt(grid_mew, 0);
             grid_mew.addEventListener(egret.TouchEvent.TOUCH_BEGIN, instance.on_grid_touch, grid_mew);
 
@@ -180,11 +182,12 @@ var black_grid = (function (_super) {
             instance.grid_array.push(grid_mew);
 
             //删除掉第一个
+            instance.grid_array[0].removeEventListener(egret.TouchEvent.TOUCH_BEGIN);
             instance.grid_array.splice(0, 1);
 
             for (var i = 0; i < instance.grid_array.length; i++) {
                 var grid_temp_0 = instance.grid_array[i];
-                egret.Tween.get(grid_temp_0).to({ y: grid_temp_0.y + 160 }, 100);
+                egret.Tween.get(grid_temp_0).to({ y: grid_temp_0.y + 120 }, 80);
             }
         }
 
@@ -199,10 +202,10 @@ var black_grid = (function (_super) {
         if (this.touchable) {
             this.red_grid = new egret.Sprite();
             this.red_grid.graphics.beginFill(0xcd0000, 1);
-            this.red_grid.graphics.drawRect(0, 0, 120, 160);
+            this.red_grid.graphics.drawRect(0, 0, 120, 120);
             this.red_grid.graphics.endFill();
             this.red_grid.width = 120;
-            this.red_grid.height = 160;
+            this.red_grid.height = 120;
             this.addChild(this.red_grid);
             this.red_grid.x = this.get_position_recently(event.stageX, event.stageY).x;
             this.red_grid.y = this.get_position_recently(event.stageX, event.stageY).y;
@@ -278,7 +281,7 @@ var black_grid = (function (_super) {
         var random = Math.floor(Math.random() * 20);
 
         var x = random % 4 * 120;
-        var y = Math.floor(random / 5) * 160;
+        var y = Math.floor(random / 7) * 170;
 
         return { x: x, y: y };
     };
@@ -286,7 +289,7 @@ var black_grid = (function (_super) {
     //传一个坐标值 返回最近 符合规定的坐标点
     black_grid.prototype.get_position_recently = function (x, y) {
         var recent_x = Math.floor(x / 120) * 120;
-        var recent_y = Math.floor(y / 160) * 160;
+        var recent_y = Math.floor(y / 120) * 120;
 
         return { x: recent_x, y: recent_y };
     };
